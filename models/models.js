@@ -11,7 +11,7 @@ const User = sequelize.define("user", {
 const Restuarant = sequelize.define("restuarant", {
    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
    name: { type: DataTypes.STRING, allowNull: false },
-   adress: { type: DataTypes.STRING, allowNull: false },
+   address: { type: DataTypes.STRING, allowNull: false },
    img: { type: DataTypes.STRING, allowNull: false },
    location: { type: DataTypes.STRING, allowNull: false },
    schedule: { type: DataTypes.STRING, allowNull: false },
