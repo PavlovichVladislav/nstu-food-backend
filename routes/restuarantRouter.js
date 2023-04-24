@@ -6,6 +6,7 @@ const restuarantController = require('../controllers/restuarantController');
 // получить столовые для конкретного корпуса
 
 router.get('/', restuarantController.getAll)
+router.get('/:id', restuarantController.getOne)
 router.post('/', restuarantController.create)
 
 module.exports = router;
