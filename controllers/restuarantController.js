@@ -1,4 +1,4 @@
-const { Restuarant, Review } = require("../models/models");
+const { Restuarant, Review, Menu } = require("../models/models");
 const uuid = require("uuid");
 const path = require("path");
 const ApiError = require("../apiError/ApiError");
@@ -50,6 +50,8 @@ class RestuarantController {
             campus,
             img: filename,
          });
+
+         const menu = await Menu.create({restuarantId: restuarant.id})
 
          return res.json(restuarant);
       } catch (error) {

@@ -51,8 +51,8 @@ Menu.belongsTo(Restuarant);
 Menu.hasMany(MenuItem);
 MenuItem.belongsTo(Menu);
 
-MenuItem.hasOne(Dish);
-Dish.belongsTo(MenuItem);
+Dish.hasMany(MenuItem);
+MenuItem.belongsTo(Dish);
 
 User.hasMany(Rating);
 Rating.belongsTo(User);
