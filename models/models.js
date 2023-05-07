@@ -54,6 +54,9 @@ MenuItem.belongsTo(Menu);
 Dish.hasMany(MenuItem);
 MenuItem.belongsTo(Dish);
 
+MenuItem.hasMany(Dish);
+Dish.belongsTo(MenuItem);
+
 User.hasMany(Rating);
 Rating.belongsTo(User);
 
