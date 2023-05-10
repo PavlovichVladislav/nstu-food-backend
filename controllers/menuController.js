@@ -30,7 +30,7 @@ class MenuController {
       });
    }
 
-   async create(req, res) {
+   async createMenuItem(req, res) {
       const { dishId, menuId } = req.body;
 
       const menuItem = await MenuItem.create({ dishId, menuId });
