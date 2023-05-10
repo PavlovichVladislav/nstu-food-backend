@@ -13,9 +13,6 @@ class UserController {
    async registration(req, res, next) {
       const { email, password, role } = req.body;
 
-      console.log(req.params);
-      console.log(email, password);
-
       if (!email || !password) {
          return next(ApiError.badRequest("Некорректный email или password"));
       }
@@ -48,17 +45,14 @@ class UserController {
       }
 
       const token = generateJwt(user.id, user.email, user.role);
-      
+
       return res.json(token);
    }
 
    async check(req, res, next) {
-      const { id } = req.query;
+      const token = generateJwt(req.user.id, req.user.email, req.user.role);
 
-      if (!id) {
-         return next(ApiError.badRequest("Не указан id!"));
-      }
-      return res.status(200).json("ok!");
+      return res.json({token});
    }
 }
 

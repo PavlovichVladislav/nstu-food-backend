@@ -4,3 +4,4 @@ Stack:
 - Express 
 - PostgreSQL 
 - Sequelize
+- jsonwebtoken & bcrypt
