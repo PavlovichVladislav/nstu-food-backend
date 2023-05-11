@@ -5,7 +5,7 @@ const ApiError = require("../apiError/ApiError");
 
 class RestuarantController {
    async getAll(req, res) {
-      let { campus, limit, page } = req.query;
+      let { campus, limit, page, search } = req.query;
 
       page = page || 1;
       limit = limit || 8;
@@ -22,13 +22,22 @@ class RestuarantController {
          restuarants = await Restuarant.findAndCountAll({ where: { campus }, limit, offset });
       }
 
+      if (search) {
+         restuarants.rows = restuarants.rows.filter((restuarant) => 
+            restuarant.dataValues.name.toLowerCase().includes(search.toLowerCase())
+         );
+
+         restuarants.count = restuarants.rows.length;
+      }
+
       return res.json(restuarants);
    }
 
    async getOne(req, res) {
       const { id } = req.params;
       const restuarant = await Restuarant.findOne({
-         where: { id }, include: [{model: Review, as: 'reviews'}]
+         where: { id },
+         include: [{ model: Review, as: "reviews" }],
       });
 
       return res.json(restuarant);
@@ -51,7 +60,7 @@ class RestuarantController {
             img: filename,
          });
 
-         const menu = await Menu.create({restuarantId: restuarant.id})
+         const menu = await Menu.create({ restuarantId: restuarant.id });
 
          return res.json(restuarant);
       } catch (error) {
