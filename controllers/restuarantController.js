@@ -26,8 +26,6 @@ class RestuarantController {
          restuarants.rows = restuarants.rows.filter((restuarant) => 
             restuarant.dataValues.name.toLowerCase().includes(search.toLowerCase())
          );
-
-         restuarants.count = restuarants.rows.length;
       }
 
       return res.json(restuarants);

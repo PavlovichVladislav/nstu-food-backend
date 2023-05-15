@@ -3,11 +3,16 @@ const { MenuItem, Menu, Dish, Restuarant } = require("../models/models");
 class MenuController {
    async getRestuarantMenu(req, res) {
       const { restuarantId } = req.params;
-      const { dishType, search } = req.query;
+      let { dishType, search, limit, page } = req.query;
 
+      page = page || 1;
+      limit = limit || 8;
+
+      let offset = (page - 1) * limit;
       let menu = null;
       let restuarantName = "";
       let dishes = [];
+      let count = 0;
 
       if (restuarantId) {
          menu = await Menu.findOne({ where: { restuarantId } });
@@ -17,9 +22,10 @@ class MenuController {
       }
 
       if (menu) {
-         const menuItems = await MenuItem.findAll({ where: { menuId: menu.id } });
+         const menuItems = await MenuItem.findAndCountAll({ where: { menuId: menu.id }, limit, offset });
+         count = menuItems.count;
 
-         for (let menuItem of menuItems) {
+         for (let menuItem of menuItems.rows) {
             let dish = null;
 
             if (dishType) {
@@ -39,7 +45,7 @@ class MenuController {
       }
 
       return res.json({
-         count: dishes.length,
+         count,
          restuarantName,
          dishes,
       });
