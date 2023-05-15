@@ -3,11 +3,11 @@ const { MenuItem, Menu, Dish, Restuarant } = require("../models/models");
 class MenuController {
    async getRestuarantMenu(req, res) {
       const { restuarantId } = req.params;
-      const { dishType } = req.query;
+      const { dishType, search } = req.query;
 
       let menu = null;
       let restuarantName = "";
-      const dishes = [];
+      let dishes = [];
 
       if (restuarantId) {
          menu = await Menu.findOne({ where: { restuarantId } });
@@ -32,7 +32,14 @@ class MenuController {
          }
       }
 
+      if (search) {
+         dishes = dishes.filter((dish) =>
+            dish.dataValues.name.toLowerCase().includes(search.toLowerCase())
+         );
+      }
+
       return res.json({
+         count: dishes.length,
          restuarantName,
          dishes,
       });
