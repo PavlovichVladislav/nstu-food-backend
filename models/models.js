@@ -33,6 +33,7 @@ const Dish = sequelize.define("dish", {
    name: { type: DataTypes.STRING, allowNull: false },
    img: { type: DataTypes.STRING, allowNull: false },
    price: { type: DataTypes.INTEGER, defaultValue: 0 },
+   dishType: { type: DataTypes.STRING }
 });
 
 const Rating = sequelize.define("rating", {

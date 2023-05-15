@@ -8,13 +8,13 @@ const { Dish } = require("../models/models");
 class DishController {
    async create(req, res, next) {
       try {
-         const { name, price } = req.body;
+         const { name, price, dishType } = req.body;
          const { img } = req.files;
          let filename = uuid.v4() + ".jpg";
 
          img.mv(path.resolve(__dirname, "..", "static", filename));
 
-         const dish = await Dish.create({ name, img: filename, price });
+         const dish = await Dish.create({ name, img: filename, price, dishType });
 
          return res.json(dish);
       } catch (e) {
