@@ -3,7 +3,7 @@ const { MenuItem, Menu, Dish, Restuarant } = require("../models/models");
 class MenuController {
    async getRestuarantMenu(req, res) {
       const { restuarantId } = req.params;
-      let { dishType, search, limit, page } = req.query;
+      let { dishType, search, limit, page, sort } = req.query;
 
       page = page || 1;
       limit = limit || 8;
@@ -42,6 +42,14 @@ class MenuController {
          dishes = dishes.filter((dish) =>
             dish.dataValues.name.toLowerCase().includes(search.toLowerCase())
          );
+      }
+
+      if (sort === 'asc') {
+         dishes.sort((a, b) => a.dataValues.price - b.dataValues.price);
+      }
+
+      if (sort === 'desc') {
+         dishes.sort((a, b) => b.dataValues.price - a.dataValues.price);
       }
 
       return res.json({
