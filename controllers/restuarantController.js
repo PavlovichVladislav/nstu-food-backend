@@ -23,7 +23,7 @@ class RestuarantController {
       }
 
       if (search) {
-         restuarants.rows = restuarants.rows.filter((restuarant) => 
+         restuarants.rows = restuarants.rows.filter((restuarant) =>
             restuarant.dataValues.name.toLowerCase().includes(search.toLowerCase())
          );
       }
