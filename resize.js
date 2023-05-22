@@ -1,6 +1,10 @@
 var fs = require("fs");
 var jimp = require("jimp");
 
+/*
+ Module for resize all images in static
+*/
+
 function givMeFiles(dir, files) {
    files = files || [];
    var allFiles = fs.readdirSync(dir);
@@ -26,4 +30,4 @@ files.forEach((file) => {
       .catch(e => console.log(e));
 });
 
-console.log(files);
+

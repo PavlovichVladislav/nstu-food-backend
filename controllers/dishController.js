@@ -18,9 +18,12 @@ class DishController {
          jimp
             .read(`../static/${filename}`)
             .then((img) => {
-               return img.resize(480, 640).quality(90).write(`../static/${filename}`);
+               return img.resize(480, 640).quality(100).write(`../static/${filename}`);
             })
             .catch((e) => console.log(e));
+
+         const { minimizeImg } = await import("../utils/minimizeImage.mjs");
+         await minimizeImg(filename);
 
          const dish = await Dish.create({ name, img: filename, price, dishType });
 
