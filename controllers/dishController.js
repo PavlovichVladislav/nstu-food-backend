@@ -25,6 +25,8 @@ class DishController {
          const { minimizeImg } = await import("../utils/minimizeImage.mjs");
          await minimizeImg(filename);
 
+         filename = filename.slice(0, -3) + 'webp';
+
          const dish = await Dish.create({ name, img: filename, price, dishType });
 
          return res.json(dish);

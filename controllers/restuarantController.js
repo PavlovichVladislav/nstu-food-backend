@@ -61,6 +61,8 @@ class RestuarantController {
          const { minimizeImg } = await import("../utils/minimizeImage.mjs");
          await minimizeImg(filename);
 
+         filename = filename.slice(0, -3) + "webp";
+
          const restuarant = await Restuarant.create({
             name,
             address,
