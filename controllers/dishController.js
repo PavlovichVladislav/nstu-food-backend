@@ -9,17 +9,22 @@ const { Dish } = require("../models/models");
 class DishController {
    async create(req, res, next) {
       try {
-         const { name, price, dishType } = req.body;
+         const { name, price, dishType, resize } = req.body;
          const { img } = req.files;
          let filename = uuid.v4() + ".jpg";
 
          await img.mv(path.resolve(__dirname, "..", "static", filename));
 
+
          const promise = new Promise((res, rej) => {
             jimp
                .read(`./static/${filename}`)
                .then((img) => {
-                  return img.resize(480, 640).quality(100).write(`./static/${filename}`);
+                  if (resize) {
+                     return img.resize(480, 640).quality(100).write(`./static/${filename}`);
+                  }
+                  
+                  else return img.quality(100).write(`./static/${filename}`);
                })
                .then(() => {
                   res();

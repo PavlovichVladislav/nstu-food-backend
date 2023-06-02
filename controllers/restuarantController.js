@@ -55,7 +55,11 @@ class RestuarantController {
             jimp
                .read(`./static/${filename}`)
                .then((img) => {
-                  return img.resize(480, 640).quality(100).write(`./static/${filename}`);
+                  if (resize) {
+                     return img.resize(480, 640).quality(100).write(`./static/${filename}`);
+                  }
+                  
+                  else return img.quality(100).write(`./static/${filename}`);
                })
                .then(() => {
                   res();
