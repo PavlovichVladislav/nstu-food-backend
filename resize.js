@@ -20,6 +20,7 @@ function givMeFiles(dir, files) {
 }
 
 const files = givMeFiles("./static");
+console.log(files);
 
 files.forEach((file) => {
    jimp
