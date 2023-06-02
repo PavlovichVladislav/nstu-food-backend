@@ -20,12 +20,13 @@ class DishController {
             .then((img) => {
                return img.resize(480, 640).quality(100).write(`../static/${filename}`);
             })
+            .then(async () => {
+               const { minimizeImg } = await import("../utils/minimizeImage.mjs");
+               await minimizeImg(filename);
+            })
             .catch((e) => console.log(e));
 
-         const { minimizeImg } = await import("../utils/minimizeImage.mjs");
-         await minimizeImg(filename);
-
-         filename = filename.slice(0, -3) + 'webp';
+         filename = filename.slice(0, -3) + "webp";
 
          const dish = await Dish.create({ name, img: filename, price, dishType });
 
