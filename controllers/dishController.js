@@ -15,22 +15,27 @@ class DishController {
 
          await img.mv(path.resolve(__dirname, "..", "static", filename));
 
-         jimp
-            .read(`../static/${filename}`)
-            .then((img) => {
-               return img.resize(480, 640).quality(100).write(`../static/${filename}`);
-            })
-            .then(async () => {
-               const { minimizeImg } = await import("../utils/minimizeImage.mjs");
-               await minimizeImg(filename);
-            })
-            .catch((e) => console.log(e));
+         const promise = new Promise((res, rej) => {
+            jimp
+               .read(`./static/${filename}`)
+               .then((img) => {
+                  return img.resize(480, 640).quality(100).write(`./static/${filename}`);
+               })
+               .then(() => {
+                  res();
+               })
+               .catch((e) => console.log(e));
+         });
 
-         filename = filename.slice(0, -3) + "webp";
+         promise.then(async () => {
+            const { minimizeImg } = await import("../utils/minimizeImage.mjs");
+            await minimizeImg(filename);
+            filename = filename.slice(0, -3) + "webp";
 
-         const dish = await Dish.create({ name, img: filename, price, dishType });
+            const dish = await Dish.create({ name, img: filename, price, dishType });
 
-         return res.json(dish);
+            return res.json(dish);
+         });
       } catch (e) {
          next(ApiError.badRequest(e.message));
       }

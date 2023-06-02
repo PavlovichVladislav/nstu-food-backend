@@ -1,7 +1,6 @@
 import imagemin from "imagemin";
 import imageminJpegtran from "imagemin-jpegtran";
 import imageminPngquant from "imagemin-pngquant";
-import imageminGM from 'imagemin-gm';
 
 import webp from "imagemin-webp";
 import fs from "fs";

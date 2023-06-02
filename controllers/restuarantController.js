@@ -51,31 +51,36 @@ class RestuarantController {
          let filename = uuid.v4() + ".jpg";
          await img.mv(path.resolve(__dirname, "..", "static", filename));
 
-         jimp
-            .read(`./static/${filename}`)
-            .then((img) => {
-               return img.resize(480, 640).quality(100).write(`./static/${filename}`);
-            })
-            .then(async () => {
-               const { minimizeImg } = await import("../utils/minimizeImage.mjs");
-               await minimizeImg(filename);
-            })
-            .catch((e) => console.log(e));
-
-         filename = filename.slice(0, -3) + "webp";
-
-         const restuarant = await Restuarant.create({
-            name,
-            address,
-            location,
-            schedule,
-            campus,
-            img: filename,
+         const promise = new Promise((res, rej) => {
+            jimp
+               .read(`./static/${filename}`)
+               .then((img) => {
+                  return img.resize(480, 640).quality(100).write(`./static/${filename}`);
+               })
+               .then(() => {
+                  res();
+               })
+               .catch((e) => console.log(e));
          });
 
-         const menu = await Menu.create({ restuarantId: restuarant.id });
+         promise.then(async () => {
+            const { minimizeImg } = await import("../utils/minimizeImage.mjs");
+            await minimizeImg(filename);
+            filename = filename.slice(0, -3) + "webp";
 
-         return res.json(restuarant);
+            const restuarant = await Restuarant.create({
+               name,
+               address,
+               location,
+               schedule,
+               campus,
+               img: filename,
+            });
+
+            const menu = await Menu.create({ restuarantId: restuarant.id });
+
+            return res.json(restuarant);
+         });
       } catch (error) {
          next(ApiError.badRequest(error.message));
       }
