@@ -45,7 +45,7 @@ class RestuarantController {
 
    async create(req, res, next) {
       try {
-         const { name, address, location, schedule, campus } = req.body;
+         const { name, address, location, schedule, campus, resize, width, height } = req.body;
 
          const { img } = req.files;
          let filename = uuid.v4() + ".jpg";
@@ -56,7 +56,10 @@ class RestuarantController {
                .read(`./static/${filename}`)
                .then((img) => {
                   if (resize) {
-                     return img.resize(480, 640).quality(100).write(`./static/${filename}`);
+                     const reszWidth = width ? width : 480;
+                     const reszHeigth = height ? height : 640;
+
+                     return img.resize(Number(reszWidth), Number(reszHeigth)).quality(100).write(`./static/${filename}`);
                   }
                   
                   else return img.quality(100).write(`./static/${filename}`);

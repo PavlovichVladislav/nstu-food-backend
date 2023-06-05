@@ -1,4 +1,5 @@
 const { MenuItem, Menu, Dish, Restuarant } = require("../models/models");
+const ApiError = require("../apiError/ApiError");
 
 class MenuController {
    async getRestuarantMenu(req, res) {
@@ -22,7 +23,11 @@ class MenuController {
       }
 
       if (menu) {
-         const menuItems = await MenuItem.findAndCountAll({ where: { menuId: menu.id }, limit, offset });
+         const menuItems = await MenuItem.findAndCountAll({
+            where: { menuId: menu.id },
+            limit,
+            offset,
+         });
          count = menuItems.count;
 
          for (let menuItem of menuItems.rows) {
@@ -44,11 +49,11 @@ class MenuController {
          );
       }
 
-      if (sort === 'asc') {
+      if (sort === "asc") {
          dishes.sort((a, b) => a.dataValues.price - b.dataValues.price);
       }
 
-      if (sort === 'desc') {
+      if (sort === "desc") {
          dishes.sort((a, b) => b.dataValues.price - a.dataValues.price);
       }
 
@@ -59,12 +64,15 @@ class MenuController {
       });
    }
 
-   async createMenuItem(req, res) {
+   async createMenuItem(req, res, next) {
       const { dishId, menuId } = req.body;
 
-      const menuItem = await MenuItem.create({ dishId, menuId });
-
-      return res.json(menuItem);
+      try {
+         const menuItem = await MenuItem.create({ dishId, menuId });
+         return res.json(menuItem);
+      } catch (error) {
+         next(ApiError.badRequest('dishId или menuId не был найден в базе данных'));
+      }
    }
 }
 
